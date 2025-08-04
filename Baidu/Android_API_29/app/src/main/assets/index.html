@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pure Browser</title>
+    <style>
+        body {
+            margin:0; padding:0; font-family:Segoe UI,Arial,sans-serif;
+            min-height:100vh;
+            background: linear-gradient(135deg, #fff 0%, #f7f7ff 100%);
+            position:relative;
+        }
+        #custom-titlebar {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 40px;
+            background: linear-gradient(90deg, #e0eaff 0%, #f7e6ff 100%);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10000;
+            -webkit-app-region: drag;
+        }
+        #custom-titlebar .title {
+            font-size: 16px;
+            color: #7a8bbd;
+            font-weight: 600;
+            margin-left: 18px;
+            letter-spacing: 1px;
+            user-select: none;
+        }
+        #custom-titlebar .window-controls {
+            display: flex;
+            align-items: center;
+            margin-right: 18px;
+        }
+        #custom-titlebar .window-controls button {
+            width: 32px; height: 32px;
+            margin-left: 6px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.5);
+            color: #7a8bbd;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s;
+            -webkit-app-region: no-drag;
+        }
+        #custom-titlebar .window-controls button:hover {
+            background: #e0eaff;
+        }
+        .arc-glass {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 480px;
+            max-width: 90vw;
+            height: 320px;
+            background: rgba(255,255,255,0.85);
+            border-radius: 32px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+            border: 1.5px solid #e0eaff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .bottom-bar {
+            position: fixed;
+            left: 0; bottom: 0; width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            background: none;
+        }
+        .bottom-bar-inner {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px 0 rgba(31,38,135,0.08);
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px;
+            margin-bottom: 16px;
+            border: 1px solid #e0eaff;
+        }
+        .bottom-btn {
+            width: 40px; height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .bottom-btn:active {
+            background: #e0eaff;
+        }
+        .bottom-btn svg {
+            width: 28px; height: 28px;
+            display: block;
+        }
+        #pure-search {
+            margin-top: 40px;
+            width: 100%;
+            display: flex; justify-content: center; align-items: center;
+        }
+        #searchInput {
+            width: 400px;
+            max-width: 80vw;
+            font-size:18px; padding:6px 12px; border-radius:6px; border:1px solid #ccc;
+            box-sizing: border-box;
+            background:rgba(255,255,255,0.7);
+        }
+    </style>
+</head>
+<body>
+    <div id="custom-titlebar">
+        <div class="title">Pure Browser</div>
+    </div>
+    <div class="arc-glass">
+        <div id="pure-search">
+            <input id="searchInput" type="text" placeholder="请输入网址或关键字" autofocus />
+        </div>
+        <div style="margin-top:32px;color:#7a8bbd;font-size:22px;font-weight:500;letter-spacing:1px;text-align:center;">极简  开源  免费<br/>无广告  不拦截  不屏蔽<br/>你的每次浏览都绝不留痕</div>
+    </div>
+    <script>
+        function doSearch() {
+            if(window.pywebview && window.pywebview.search){
+                window.pywebview.search(document.getElementById('searchInput').value);
+            } else if(window.pywebview && window.pywebview.api && window.pywebview.api.search){
+                window.pywebview.api.search(document.getElementById('searchInput').value);
+            }
+        }
+        document.getElementById('searchInput').addEventListener('keydown', function(e){
+            if(e.key === 'Enter'){
+                doSearch();
+            }
+        });
+        document.getElementById('searchInput').addEventListener('change', function(e){
+            doSearch();
+        });
+        document.getElementById('searchInput').addEventListener('keyup', function(e){
+            if(e.key === 'Enter'){
+                doSearch();
+            }
+        });
+        // Bottom bar button events (need to be implemented in native code)
+        document.getElementById('backBtn').onclick = function(){
+            if(window.pywebview && window.pywebview.back){window.pywebview.back();}
+        };
+        document.getElementById('forwardBtn').onclick = function(){
+            if(window.pywebview && window.pywebview.forward){window.pywebview.forward();}
+        };
+        document.getElementById('tabsBtn').onclick = function(){
+            if(window.pywebview && window.pywebview.tabs){window.pywebview.tabs();}
+        };
+        document.getElementById('newTabBtn').onclick = function(){
+            if(window.pywebview && window.pywebview.newTab){window.pywebview.newTab();}
+        };
+        document.getElementById('clearBtn').onclick = function(){
+            if(window.pywebview && window.pywebview.clearTabs){window.pywebview.clearTabs();}
+        };
+        document.getElementById('homeBtn').onclick = function(){
+            if(window.pywebview && window.pywebview.home){window.pywebview.home();}
+        };
+    </script>
+</body>
+</html>
