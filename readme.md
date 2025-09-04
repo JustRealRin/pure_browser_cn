@@ -28,7 +28,3 @@ Windows 11(21H2)
 
 \*同时也支持内置了Microsoft Edge WebView2 Runtime的Windows 10 64位操作系统
 
-
-
-本浏览器会阻止所有不安全的网络连线，如过时的http技术和明文传输
-
